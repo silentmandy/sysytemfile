@@ -1,0 +1,47 @@
+`timescale 1ns / 1ps
+
+module d_flip_flop (
+    input D,
+    input clk,
+    output reg Q,
+    output reg Qn
+);
+    always @(posedge clk) begin
+        Q <= D;
+        Qn <= ~D;
+    end
+endmodule
+
+
+TESTBENCH
+
+
+`timescale 1ns / 1ps
+
+module tb_d_flip_flop;
+    reg D;
+    reg clk;
+    wire Q;
+    wire Qn;
+
+    d_flip_flop uut (
+        .D(D),
+        .clk(clk),
+        .Q(Q),
+        .Qn(Qn)
+    );
+
+    initial begin
+        clk = 0;
+        forever #10 clk = ~clk;
+    end
+
+    initial begin
+        $display("Time\tD\tQ\tQn");
+        D = 0; #10;
+        D = 1; #10;
+        D = 0; #10;
+        D = 1; #10;
+        D = 1; #20;
+    end
+endmodule

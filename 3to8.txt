@@ -1,0 +1,48 @@
+`timescale 1ns / 1ps
+
+module decoder_3to8 (
+    input [2:0] A,
+    output reg [7:0] D
+);
+    always @(*) begin
+        D = 8'b00000000;
+        case (A)
+            3'b000: D[0] = 1'b1;
+            3'b001: D[1] = 1'b1;
+            3'b010: D[2] = 1'b1;
+            3'b011: D[3] = 1'b1;
+            3'b100: D[4] = 1'b1;
+            3'b101: D[5] = 1'b1;
+            3'b110: D[6] = 1'b1;
+            3'b111: D[7] = 1'b1;
+            default: D = 8'b00000000;
+        endcase
+    end
+endmodule
+
+TestBENCH
+
+`timescale 1ns / 1ps
+
+module tb_decoder_3to8;
+    reg [2:0] A;
+    wire [7:0] D;
+
+    decoder_3to8 uut (
+        .A(A),
+        .D(D)
+    );
+
+    initial begin
+        $display("Time\tA\tD");
+        A = 3'b000; #10;
+        A = 3'b001; #10;
+        A = 3'b010; #10;
+        A = 3'b011; #10;
+        A = 3'b100; #10;
+        A = 3'b101; #10;
+        A = 3'b110; #10;
+        A = 3'b111; #10;
+        $finish;
+    end
+endmodule

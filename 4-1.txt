@@ -1,0 +1,93 @@
+SOURCE
+
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 22.12.2024 13:55:50
+// Design Name: 
+// Module Name: mux4_1
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+// mux4_1.v
+module mux4_1 (
+  input wire [3:0] d, // 4 data inputs
+  input wire [1:0] sel, // 2-bit select signal
+  output reg y      // Output
+);
+
+  always @(*) begin 
+    case (sel)
+      2'b00: y = d[0];
+      2'b01: y = d[1];
+      2'b10: y = d[2];
+      2'b11: y = d[3];
+      default: y = 1'b0; // Default case
+    endcase
+  end
+
+endmodule
+
+TESTBENCH
+
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 22.12.2024 14:00:36
+// Design Name: 
+// Module Name: mux4_1_tb
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
+module tb_mux4_1;
+
+  reg [3:0] d;
+  reg [1:0] sel;
+  wire y;
+
+  // Instantiate the mux4_1 module
+  mux4_1 uut (
+    .d(d), 
+    .sel(sel),
+    .y(y)
+  );
+
+  initial begin
+    $monitor("At time %0t: sel = %b, d = %b -> y = %b", $time, sel, d, y); 
+
+    // Test vectors
+    d = 4'b1010; sel = 2'b00; #10; 
+    d = 4'b1010; sel = 2'b01; #10;
+    d = 4'b1010; sel = 2'b10; #10; 
+    d = 4'b1010; sel = 2'b11; #10; 
+
+    $finish; 
+  end
+
+endmodule

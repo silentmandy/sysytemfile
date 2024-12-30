@@ -1,0 +1,62 @@
+`timescale 1ns / 1ps
+
+module SR_FlipFlop (
+    input S,
+    input R,
+    input clk,
+    output reg Q,
+    output reg Qn
+);
+    always @(posedge clk) begin
+        if (S && ~R) begin
+            Q <= 1;
+            Qn <= 0;
+        end else if (~S && R) begin
+            Q <= 0;
+            Qn <= 1;
+        end else if (S && R) begin
+            Q <= 1'bx;
+            Qn <= 1'bx;
+        end
+    end
+endmodule
+
+
+
+TESTBENCH
+
+`timescale 1ns / 1ps
+
+module tb_SR_FlipFlop;
+    reg S;
+    reg R;
+    reg clk;
+    wire Q;
+    wire Qn;
+
+    SR_FlipFlop uut (
+        .S(S),
+        .R(R),
+        .clk(clk),
+        .Q(Q),
+        .Qn(Qn)
+    );
+
+    initial begin
+        clk = 0;
+        forever #5 clk = ~clk;
+    end
+
+    initial begin
+        $display("Time\tS\tR\tQ\tQn");
+        $monitor("%0t\t%b\t%b\t%b\t%b", $time, S, R, Q, Qn);
+
+        S = 0; R = 0; #10;
+        S = 1; R = 0; #10;
+        S = 0; R = 1; #10;
+        S = 1; R = 1; #10;
+        S = 0; R = 0; #10;
+
+        $finish;
+    end
+endmodule

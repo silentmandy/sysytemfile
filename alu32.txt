@@ -1,0 +1,49 @@
+module ALU32(
+    input En,
+    input [3:0] Op,
+    input [31:0] A, B,
+    output reg [32:0] Y
+);
+    always @(En, Op, A, B) begin
+        if (En == 0) 
+            Y = 33'bz;
+        else begin
+            case (Op)
+                4'b0000: Y = A + B;
+                4'b0001: Y = A - B;
+                4'b0010: Y = ~A;
+                4'b0011: Y = A & B;
+                4'b0100: Y = A | B;
+                4'b0101: Y = ~(A & B);
+                4'b0110: Y = A ^ B;
+                default: Y = 33'bz;
+            endcase
+        end
+    end
+endmodule
+
+
+TESTBENCH
+
+`timescale 1ns/1ns
+
+module ALU32_tb;
+    reg En;
+    reg [3:0] Op;
+    reg [31:0] A, B;
+    wire [32:0] Y;
+
+    ALU32 A1(A, B, Op, En, Y);
+
+    initial begin
+        #100 A = 32'b0010101010101010101010101010101;
+        B = 32'b0000000000000000001111111111111;
+        Op = 4'b0011;
+        En = 1'b1;
+        
+        #100 A = 32'b0001111000011110000111100001111;
+        B = 32'b00110011001100110011001100110011;
+        Op = 4'b0101;
+        En = 1'b1;
+    end
+endmodule

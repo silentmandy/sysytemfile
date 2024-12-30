@@ -1,0 +1,70 @@
+module Adder4bit (
+    input [3:0] A,
+    input [3:0] B,
+    input Cin,
+    output [3:0] Sum,
+    output Cout
+);
+    wire C1, C2, C3;
+
+    FullAdder FA0 (
+        .A(A[0]), 
+        .B(B[0]), 
+        .Cin(Cin), 
+        .Sum(Sum[0]), 
+        .Cout(C1)
+    );
+
+    FullAdder FA1 (
+        .A(A[1]), 
+        .B(B[1]), 
+        .Cin(C1), 
+        .Sum(Sum[1]), 
+        .Cout(C2)
+    );
+
+    FullAdder FA2 (
+        .A(A[2]), 
+        .B(B[2]), 
+        .Cin(C2), 
+        .Sum(Sum[2]), 
+        .Cout(C3)
+    );
+
+    FullAdder FA3 (
+        .A(A[3]), 
+        .B(B[3]), 
+        .Cin(C3), 
+        .Sum(Sum[3]), 
+        .Cout(Cout)
+    );
+endmodule
+
+
+TESTBENCH
+
+`timescale 1ns / 1ps
+module tb_Adder4bit;
+ reg [3:0] A; 
+ reg [3:0] B;
+reg Cin; 
+wire [3:0] Sum;  
+wire Cout;
+Adder4bit uut ( 
+.A(A), 
+.B(B), 
+.Cin(Cin), 
+.Sum(Sum), 
+.Cout(Cout)
+); // Test cases 
+initial begin
+     $display("Time\tA\tB\tCin\tSum\tCout");
+// Apply test inputs 
+    A = 4'b0001; B = 4'b0010; Cin = 0; #10; // Test case 1 
+    A = 4'b0101; B = 4'b0011; Cin = 0; #10; // Test case 2 
+    A = 4'b1111; B = 4'b1111; Cin = 0; #10; // Test case 3 
+    A = 4'b1010; B = 4'b0101; Cin = 1; #10; // Test case 4 
+    A = 4'b0000; B = 4'b0000; Cin = 1; #10; // Test case 5 // End simulation
+    $finish; 
+  end
+endmodule
